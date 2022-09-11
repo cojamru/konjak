@@ -1,5 +1,3 @@
-from typing import List
-
 from fastapi import Depends, HTTPException, status
 from sqlalchemy.orm import Session
 
@@ -22,7 +20,7 @@ class GamesService:
         self.session.commit()
         return game
 
-    def get_list(self) -> List[tables.Game]:
+    def get_list(self) -> list[tables.Game]:
         games = (
             self.session
             .query(tables.Game)
@@ -38,7 +36,10 @@ class GamesService:
             .first()
         )
         if not game:
-            raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail=f"Game {game_data} not found")
+            raise HTTPException(
+                status_code=status.HTTP_404_NOT_FOUND,
+                detail=f"Game({', '.join([str(key + '=' + value) for key, value in game_data.items()])}) not found"
+            )
         return game
 
     def get(self, game_slug: str):
@@ -47,8 +48,9 @@ class GamesService:
     def delete(self, game_slug: str):
         game = self._get(slug=game_slug)
         self.session.delete(game)
+        self.session.commit()
 
-    def update(self, game_data: GameUpdate, game_slug: str):
+    def update(self, game_slug: str, game_data: GameUpdate):
         game = self._get(slug=game_slug)
         for field, value in game_data:
             if field == 'links':

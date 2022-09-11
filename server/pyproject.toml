@@ -13,6 +13,10 @@ SQLAlchemy = "^1.4.41"
 pydantic = "^1.10.2"
 python-dotenv = "^0.21.0"
 psycopg2 = "^2.9.3"
+email-validator = "^1.2.1"
+python-multipart = "^0.0.5"
+passlib = {extras = ["bcrypt"], version = "^1.7.4"}
+python-jose = "^3.3.0"
 
 
 [build-system]

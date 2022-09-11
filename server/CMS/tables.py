@@ -1,4 +1,4 @@
-from sqlalchemy import Column, String, Date, Integer, Table, ForeignKey, MetaData
+from sqlalchemy import Column, String, Date, Integer, Table, ForeignKey
 
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import relationship, declared_attr
@@ -48,3 +48,9 @@ class Game(Base, HasLinks):
     release_date = Column(Date)
     platform = Column(String)
     description = Column(String, nullable=True)
+
+
+class User(Base):
+    email = Column(String, unique=True)
+    username = Column(String, unique=True)
+    password_hash = Column(String)

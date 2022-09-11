@@ -1,7 +1,6 @@
 from datetime import date
-from typing import Optional, List
 
-from pydantic import BaseModel, HttpUrl
+from pydantic import BaseModel
 
 from .links import LinkCreate, Link
 
@@ -10,22 +9,22 @@ class GameBase(BaseModel):
     title: str
     release_date: date
     platform: str
-    description: Optional[str]
+    description: str | None = None
 
 
 class GameCreate(GameBase):
     slug: str
-    links: List[LinkCreate]
+    links: list[LinkCreate]
 
 
 class GameUpdate(GameBase):
-    links: List[LinkCreate]
+    links: list[LinkCreate] = []
 
 
 class Game(GameBase):
     id: int
     slug: str
-    links: List[Link]
+    links: list[Link]
 
     class Config:
         orm_mode = True
