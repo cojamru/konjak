@@ -3,6 +3,12 @@ from fastapi import FastAPI
 from .api import api_router
 
 description = """
+Content Managment System for [**Cojam.ru**](https://cojam.ru/)
+
+## Authentication
+
+Simple auth by username+password
+
 ## Games
 
 You can manipulate **Game** content by its slug:

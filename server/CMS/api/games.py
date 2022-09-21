@@ -1,22 +1,20 @@
 from fastapi import APIRouter
 from fastapi import Depends
-from fastapi.openapi.models import Response
-from starlette import status
+from fastapi.responses import HTMLResponse
 
 from ..models.auth import User
+from ..models.games import Game, GameCreate, GameUpdate
 from ..services.auth import get_current_user
 from ..services.games import GamesService
-from ..models.games import Game, GameCreate, GameUpdate
 
 games_router = APIRouter(
     prefix='/games',
-    tags=['Games']
+    tags=['games']
 )
 
 
 @games_router.get('/', response_model=list[Game])
 def get_games(game_service: GamesService = Depends()):
-    """List of all games"""
     return game_service.get_list()
 
 
@@ -54,4 +52,4 @@ def delete_game(
         game_service: GamesService = Depends(),
 ):
     game_service.delete(game_slug=slug)
-    # return Response(status_code=status.HTTP_204_NO_CONTENT)
+    return HTMLResponse(status_code=204)

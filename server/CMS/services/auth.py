@@ -8,7 +8,7 @@ from pydantic import ValidationError
 from sqlalchemy.orm import Session
 from starlette import status
 
-from CMS.models.auth import User, Token, UserCreate
+from ..models.auth import User, Token, UserCreate
 
 from .. import tables
 from ..database import get_session
@@ -76,8 +76,6 @@ class AuthService:
             settings.jwt_algorithm,
         )
         return Token(access_token=token)
-
-    session: Session
 
     def __init__(self, session: Session = Depends(get_session)):
         self.session = session

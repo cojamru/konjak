@@ -17,6 +17,7 @@ email-validator = "^1.2.1"
 python-multipart = "^0.0.5"
 passlib = {extras = ["bcrypt"], version = "^1.7.4"}
 python-jose = "^3.3.0"
+pyuploadcare = "^2.0.0"
 
 
 [build-system]

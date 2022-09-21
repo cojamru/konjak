@@ -1,12 +1,12 @@
 from fastapi import APIRouter, Depends
 from fastapi.security import OAuth2PasswordRequestForm
 
-from CMS.models.auth import Token, UserCreate, User
-from CMS.services.auth import AuthService, get_current_user
+from ..models.auth import Token, UserCreate, User
+from ..services.auth import AuthService, get_current_user
 
 auth_router = APIRouter(
     prefix='/auth',
-    tags=['Authentication']
+    tags=['authentication']
 )
 
 
