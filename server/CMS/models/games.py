@@ -18,7 +18,7 @@ class GameCreate(GameBase):
 
 
 class GameUpdate(GameBase):
-    links: list[LinkCreate] = []
+    links: list[LinkCreate] | None
 
 
 class Game(GameBase):

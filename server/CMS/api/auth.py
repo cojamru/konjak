@@ -1,6 +1,7 @@
-from fastapi import APIRouter, Depends
+from fastapi import APIRouter, Depends, Response
 from fastapi.security import OAuth2PasswordRequestForm
 
+from ..constants import AUTH_COOKIE_NAME
 from ..models.auth import Token, UserCreate, User
 from ..services.auth import AuthService, get_current_user
 
@@ -20,13 +21,26 @@ def sing_up(
 
 @auth_router.post('/sign-in', response_model=Token)
 def sign_in(
+        response: Response,
         form_data: OAuth2PasswordRequestForm = Depends(),
         service: AuthService = Depends(),
 ):
-    return service.authenticate_user(
+    token = service.authenticate_user(
         form_data.username.lower(),
         form_data.password,
     )
+
+    response.set_cookie(
+        key=AUTH_COOKIE_NAME,
+        value=token.access_token,
+        httponly=True,
+        path='/',
+        samesite='None',
+        secure=True,
+        expires=int(token.expires.timestamp())
+    )
+
+    return token
 
 
 @auth_router.get('/user', response_model=User)

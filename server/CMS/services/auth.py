@@ -1,20 +1,45 @@
 from datetime import datetime, timedelta
 
-from fastapi import HTTPException, Depends
+from fastapi import HTTPException, Depends, Request
 from fastapi.security import OAuth2PasswordBearer
-from jose import jwt, JWTError
-from passlib.hash import bcrypt
-from pydantic import ValidationError
-from sqlalchemy.orm import Session
+from fastapi.security.utils import get_authorization_scheme_param
 from starlette import status
 
-from ..models.auth import User, Token, UserCreate
+from jose import jwt, JWTError
+from passlib.hash import bcrypt
+
+from pydantic import ValidationError
+from sqlalchemy.orm import Session
 
 from .. import tables
+
+from ..constants import AUTH_COOKIE_NAME
+from ..models.auth import User, Token, UserCreate
 from ..database import get_session
 from ..settings import settings
 
-oauth_scheme = OAuth2PasswordBearer(tokenUrl='/auth/sign-in')
+
+class OAuth2PasswordBearerWithCookie(OAuth2PasswordBearer):
+    def __call__(self, request: Request) -> str | None:
+        authorization: str = request.headers.get("Authorization")
+        scheme, param = get_authorization_scheme_param(authorization)
+        if not authorization or scheme.lower() != "bearer":
+            auth_cookie = request.cookies.get(AUTH_COOKIE_NAME)
+            if auth_cookie:
+                return auth_cookie
+
+            if self.auto_error:
+                raise HTTPException(
+                    status_code=401,
+                    detail="Not authenticated",
+                    headers={"WWW-Authenticate": "Bearer"},
+                )
+
+        print(f"param = {param}")
+        return param
+
+
+oauth_scheme = OAuth2PasswordBearerWithCookie(tokenUrl='/auth/sign-in')
 
 
 def get_current_user(token: str = Depends(oauth_scheme)) -> User:
@@ -63,10 +88,12 @@ class AuthService:
         user_data = User.from_orm(user)
 
         now = datetime.utcnow()
+        expiration_time = now + timedelta(seconds=settings.jwt_expiration)
+
         payload = {
             'iat': now,
             'nbf': now,
-            'exp': now + timedelta(seconds=settings.jwt_expiration),
+            'exp': expiration_time,
             'sub': str(user_data.id),
             'user': user_data.dict(),
         }
@@ -75,7 +102,7 @@ class AuthService:
             settings.jwt_secret,
             settings.jwt_algorithm,
         )
-        return Token(access_token=token)
+        return Token(access_token=token, expires=expiration_time)
 
     def __init__(self, session: Session = Depends(get_session)):
         self.session = session

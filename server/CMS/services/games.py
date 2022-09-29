@@ -61,6 +61,10 @@ class GamesService:
 
     def delete(self, game_slug: str):
         game = self._get(slug=game_slug)
+
+        image_service = ImageService()
+        image_service.delete(game.image_url)
+
         self.session.delete(game)
         self.session.commit()
 

@@ -55,3 +55,38 @@ class User(Base):
     email = Column(String, unique=True)
     username = Column(String, unique=True)
     password_hash = Column(String)
+
+
+album_artist_association = Table(
+    "album-artist",
+    Base.metadata,
+    Column("music_id", ForeignKey("album.id")),
+    Column("artist_id", ForeignKey("artist.id")),
+)
+
+
+class Album(Base, HasLinks):
+    title = Column(String)
+    slug = Column(String, unique=True)
+    description = Column(String, nullable=True)
+    release_date = Column(Date)
+
+    artist = relationship("artist")
+    artist_id = Column(Integer, ForeignKey("artist.id"))
+    featured = relationship("artist", secondary=album_artist_association)
+
+    tracks = relationship("track")
+
+
+class Artist(Base):
+    nickname = Column(String)
+    link = Column(String)
+    tracks = relationship("track")
+
+
+class Track(Base):
+    title = Column(String)
+    description = Column(String, nullable=True)
+
+    artist_id = Column(Integer, ForeignKey("artist.id"))
+    album_id = Column(Integer, ForeignKey("album.id"))
