@@ -7,6 +7,9 @@
     "start": "vite",
     "build": "tsc && vite build",
     "build:ci": "tsc && node --max-old-space-size=6144 ./node_modules/.bin/vite build",
+    "lint": "eslint src",
+    "typecheck": "tsc --noEmit",
+    "prettier": "prettier --write .",
     "create-env": "ncp .env.example .env"
   },
   "dependencies": {

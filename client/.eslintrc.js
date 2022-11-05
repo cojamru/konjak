@@ -73,10 +73,7 @@ module.exports = {
     'jsx-a11y/no-static-element-interactions': 'off',
 
     'no-console': ['warn', { allow: ['warn', 'error'] }],
-    'no-param-reassign': [
-      'warn',
-      { props: true, ignorePropertyModificationsForRegex: ['.*[Rr]ef'] },
-    ],
+    'no-param-reassign': ['warn', { props: true, ignorePropertyModificationsForRegex: ['.*[Rr]ef'] }],
     'no-use-before-define': 'off',
     'no-unsafe-optional-chaining': 'warn',
     'no-promise-executor-return': 'warn',
