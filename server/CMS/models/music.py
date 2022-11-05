@@ -5,37 +5,37 @@ from pydantic import BaseModel
 from .links import LinkCreate, Link
 
 
-class TrackBase(BaseModel):
-    title: str
-    description: str | None
-
-    artist_id: int
-    album_id: int
+class ArtistBase(BaseModel):
+    nickname: str
 
 
-class TrackCreate(TrackBase):
+class ArtistCreate(ArtistBase):
     pass
 
 
-class Track(TrackBase):
+class Artist(ArtistBase):
     id: int
+    link: str | None
+    # tracks: list[Track]
 
     class Config:
         orm_mode = True
 
 
-class ArtistBase(BaseModel):
-    nickname: str
-    link: str
+class TrackBase(BaseModel):
+    title: str
+    description: str | None
 
 
-class ArtistCreate(ArtistBase):
-    tracks: list[TrackCreate]
+class TrackCreate(TrackBase):
+    featured: list[ArtistCreate] | None
 
 
-class Artist(ArtistBase):
+class Track(TrackBase):
     id: int
-    tracks: list[Track]
+    artist_id: int
+    album_id: int
+    artists: list[Artist]
 
     class Config:
         orm_mode = True
@@ -46,19 +46,22 @@ class AlbumBase(BaseModel):
     description: str | None
     release_date: date
 
-    artist_id: int
     featured: list[ArtistBase] | None
 
 
 class AlbumCreate(AlbumBase):
     slug: str
 
-    tracks: list[TrackCreate] | None
+    artists: list[ArtistCreate]
+    tracks: list[TrackCreate]
     links: list[LinkCreate]
 
 
 class Album(AlbumBase):
     id: int
+    slug: str
+
+    artist_id: int
 
     class Config:
         orm_mode = True

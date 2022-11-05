@@ -1,8 +1,7 @@
 from fastapi import APIRouter, UploadFile, File, Depends, HTTPException
 
-from ..models.auth import User
-from ..services.auth import get_current_user
-from ..services.games import GamesService
+from ..models import User
+from ..services import get_current_user, GamesService
 
 files_router = APIRouter(
     prefix='/files',
