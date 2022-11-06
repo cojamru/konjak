@@ -14,7 +14,7 @@ class MusicService:
     def __init__(self, session: Session = Depends(get_session)):
         self.session = session
 
-    def get_list(self) -> list[AlbumORM]:
+    def get_albums_list(self) -> list[AlbumORM]:
         albums = (
             self.session
             .query(AlbumORM)
@@ -40,28 +40,44 @@ class MusicService:
             else:
                 return instance
 
+    def _init_and_get_tracks_featured(self, tracks: list[TrackCreate]) -> list[ArtistORM] | None:
+        """
+        Initialize tracks.featured and get list of unique featured artists
+
+        :param tracks: object with the .featured field that needs to be initialized
+        :return: list of unique featured artists across all the tracks
+        """
+
+        album_featured = []
+        for track in tracks:
+            if not track.featured:
+                track.featured = []
+                continue
+
+            featured = [
+                self._get_or_create(ArtistORM, **featured_artist.dict())
+                for featured_artist in track.featured
+            ]
+            album_featured += featured
+            track.featured = featured
+
+        if not album_featured:
+            return None
+
+        album_featured = list(set(album_featured))
+        return album_featured
+
     def create_album(self, album_data: AlbumCreate) -> AlbumORM:
         album_data.artists = [self._get_or_create(ArtistORM, **artist.dict()) for artist in album_data.artists]
         album_data.links = [LinkORM(**link.dict()) for link in album_data.links]
 
-        for track in album_data.tracks:
-            track.featured = [
-                self._get_or_create(ArtistORM, **featured_artist.dict())
-                for featured_artist in track.featured
-            ]
-
+        album_featured = self._init_and_get_tracks_featured(album_data.tracks)
         album_data.tracks = [TrackORM(artists=album_data.artists, **track.dict()) for track in album_data.tracks]
+        if album_featured:
+            album_data.featured = album_featured
 
         album = AlbumORM(**album_data.dict())
-        self.session.add_all(album.tracks)
         self.session.add(album)
         self.session.commit()
 
         return album
-
-    def create_track(self, track_data: TrackCreate) -> TrackORM:
-        track = TrackORM(**track_data.dict())
-        self.session.add(track)
-        self.session.commit()
-
-        return track

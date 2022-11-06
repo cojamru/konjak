@@ -33,7 +33,7 @@ class TrackCreate(TrackBase):
 
 class Track(TrackBase):
     id: int
-    artist_id: int
+
     album_id: int
     artists: list[Artist]
 
@@ -46,14 +46,12 @@ class AlbumBase(BaseModel):
     description: str | None
     release_date: date
 
-    featured: list[ArtistBase] | None
-
 
 class AlbumCreate(AlbumBase):
     slug: str
 
-    artists: list[ArtistCreate]
     tracks: list[TrackCreate]
+    artists: list[ArtistCreate]
     links: list[LinkCreate]
 
 
@@ -61,7 +59,10 @@ class Album(AlbumBase):
     id: int
     slug: str
 
-    artist_id: int
+    tracks: list[Track]
+    artists: list[Artist]
+    featured: list[Artist] | None
+    links: list[Link]
 
     class Config:
         orm_mode = True

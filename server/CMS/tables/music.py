@@ -48,6 +48,8 @@ class Track(Base, HasArtists):
     title = Column(String)
     description = Column(String, nullable=True)
 
+    album_id = Column(Integer, ForeignKey("album.id"))
+
 
 class Album(Base, HasLinks, HasArtists):
     title = Column(String)
@@ -55,4 +57,4 @@ class Album(Base, HasLinks, HasArtists):
     description = Column(String, nullable=True)
     release_date = Column(Date)
 
-    tracks = relationship("Track")
+    tracks = relationship("Track", backref='album')
