@@ -1,7 +1,7 @@
 import { Layout } from 'antd';
 
 import style from './CMSLayout.module.scss';
-import { CMSLayoutHeader, CMSLayoutFooter } from './components';
+import { CMSLayoutHeader, CMSLayoutFooter, CMSLayoutSider } from './components';
 
 const { Content } = Layout;
 
@@ -14,11 +14,14 @@ export const CMSLayout: React.FC<PropsType> = props => {
 
   return (
     <Layout className={style.CMSLayout}>
-      <CMSLayoutHeader />
+      <CMSLayoutSider />
+      <Layout>
+        <CMSLayoutHeader />
 
-      <Content>{children}</Content>
+        <Content>{children}</Content>
 
-      <CMSLayoutFooter />
+        <CMSLayoutFooter />
+      </Layout>
     </Layout>
   );
 };
