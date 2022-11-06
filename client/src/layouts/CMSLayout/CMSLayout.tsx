@@ -1,30 +1,24 @@
 import { Layout } from 'antd';
 
-import CMSLayoutFooter from './Footer/Footer';
-import CMSLayoutHeader from './Header/Header';
+import style from './CMSLayout.module.scss';
+import { CMSLayoutHeader, CMSLayoutFooter } from './components';
 
-import './CMSLayout.scss';
-
-const { Header, Footer, Content } = Layout;
+const { Content } = Layout;
 
 type PropsType = {
   children: React.ReactNode;
 };
 
-const CMSLayout: React.FC<PropsType> = props => {
+export const CMSLayout: React.FC<PropsType> = props => {
   const { children } = props;
 
   return (
-    <Layout className="layout">
-      <Header>
-        <CMSLayoutHeader ClassName="layout__header" />
-      </Header>
+    <Layout className={style.CMSLayout}>
+      <CMSLayoutHeader />
+
       <Content>{children}</Content>
-      <Footer>
-        <CMSLayoutFooter ClassName="layout__footer" />
-      </Footer>
+
+      <CMSLayoutFooter />
     </Layout>
   );
 };
-
-export default CMSLayout;

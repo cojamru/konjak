@@ -5,7 +5,7 @@ import './index.scss';
 
 import { createRoot } from 'react-dom/client';
 
-import Layout from './layouts/CMSLayout/CMSLayout';
+import { CMSLayout } from './layouts/CMSLayout/CMSLayout';
 
 const rootElement = document.getElementById('app-root');
 
@@ -14,9 +14,9 @@ if (rootElement) {
 
   reactRoot.render(
     <React.StrictMode>
-      <Layout>
-        <div>fwefew suka</div>
-      </Layout>
+      <CMSLayout>
+        <div>content</div>
+      </CMSLayout>
     </React.StrictMode>,
   );
 }
