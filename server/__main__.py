@@ -13,7 +13,7 @@ def create_tables():
 
 
 if __name__ == '__main__':
-    # create_tables()
+    create_tables()
     uvicorn.run(
         'CMS.app:app',
         port=settings.server_port,

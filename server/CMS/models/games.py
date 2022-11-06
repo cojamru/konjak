@@ -24,7 +24,9 @@ class GameUpdate(GameBase):
 class Game(GameBase):
     id: int
     slug: str
+
     links: list[Link]
+    image_url: HttpUrl | None
 
     class Config:
         orm_mode = True

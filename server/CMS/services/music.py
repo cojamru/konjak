@@ -1,15 +1,17 @@
 from fastapi import Depends, HTTPException
 from sqlalchemy.orm import Session
 
-from ..tables import Album as AlbumORM
-from ..tables import Artist as ArtistORM
-from ..tables import Track as TrackORM
-from ..tables import Link as LinkORM
+from ..tables import \
+    Album as AlbumORM, \
+    Artist as ArtistORM, \
+    Track as TrackORM, \
+    Link as LinkORM
 
 from ..database import get_session
 from ..models import AlbumCreate, AlbumUpdate, TrackCreate
 
 from .utility import UtilityService
+from .files import ImageService
 
 
 class MusicService:
@@ -110,6 +112,10 @@ class MusicService:
         album = self.get_album(slug=slug)
         self.session.delete(album)
 
+        if album.image_url:
+            image_service = ImageService()
+            image_service.delete(album.image_url)
+
         self.session.commit()
 
     def update_album(self, slug: str, album_data: AlbumUpdate):
@@ -132,3 +138,17 @@ class MusicService:
 
         self.session.commit()
         return album
+
+    def add_album_cover(self, slug: str, image: any) -> str:
+        image_service = ImageService()
+        image_url: str = image_service.upload(image)
+
+        album = self.get_album(slug=slug)
+
+        if album.image_url:
+            image_service.delete(album.image_url)
+
+        album.image_url = image_url
+
+        self.session.commit()
+        return image_url

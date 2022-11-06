@@ -10,6 +10,6 @@ class Game(Base, HasLinks):
     release_date = Column(Date)
     platform = Column(String)
     description = Column(String, nullable=True)
-    image_url = Column(String)
+    image_url = Column(String, nullable=True)
 
 

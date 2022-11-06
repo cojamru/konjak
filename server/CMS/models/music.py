@@ -1,6 +1,6 @@
 from datetime import date
 
-from pydantic import BaseModel, Extra
+from pydantic import BaseModel, Extra, HttpUrl
 
 from .links import LinkCreate, Link
 
@@ -77,7 +77,9 @@ class Album(AlbumBase):
     tracks: list[Track]
     artists: list[Artist]
     featured: list[Artist] | None
+
     links: list[Link]
+    image_url: HttpUrl | None
 
     class Config:
         orm_mode = True

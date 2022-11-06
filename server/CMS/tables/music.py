@@ -61,5 +61,6 @@ class Album(Base, HasLinks, HasArtists, HasFeatured):
     slug = Column(String, unique=True)
     description = Column(String, nullable=True)
     release_date = Column(Date)
+    image_url = Column(String, nullable=True)
 
     tracks = relationship("Track", backref='album', cascade="all, delete-orphan", single_parent=True)

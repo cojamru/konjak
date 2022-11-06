@@ -65,8 +65,9 @@ class GamesService:
     def delete(self, game_slug: str):
         game = self._get(slug=game_slug)
 
-        image_service = ImageService()
-        image_service.delete(game.image_url)
+        if game.image_url:
+            image_service = ImageService()
+            image_service.delete(game.image_url)
 
         self.session.delete(game)
         self.session.commit()
@@ -83,8 +84,3 @@ class GamesService:
 
         self.session.commit()
         return game
-
-    def update_image(self, game_slug: str, image_url: str):
-        game = self._get(slug=game_slug)
-        game.image_url = image_url
-        self.session.commit()
