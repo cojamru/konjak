@@ -8,6 +8,7 @@ from ..database import get_session
 from ..models import GameCreate, GameUpdate
 
 from .files import ImageService
+from .utility import UtilityService
 
 
 class GamesService:
@@ -73,7 +74,7 @@ class GamesService:
     def update(self, game_slug: str, game_data: GameUpdate):
         game = self._get(slug=game_slug)
 
-        self._update_links(game, game_data.links)
+        UtilityService.update_many_to_many(LinkORM, game.links, game_data.links)
 
         for field, value in game_data:
             if field == 'links':
@@ -82,30 +83,6 @@ class GamesService:
 
         self.session.commit()
         return game
-
-    def _update_links(self, game: GameORM, new_links: list):
-        """
-        Update GameORM object without committing to DB
-
-        :param game: game object to update
-        :param new_links: list[LinkCreate]
-        :return: None
-        """
-
-        current_links = game.links
-        number_of_links_diff = len(new_links) - len(current_links)
-
-        # update number of links
-        for _ in range(abs(number_of_links_diff)):
-            if number_of_links_diff < 0:
-                current_links.remove(current_links[-1])
-            elif number_of_links_diff > 0:
-                current_links.append(LinkORM())
-
-        # update current_links values
-        for i in range(len(current_links)):
-            for field, value in new_links[i]:
-                setattr(current_links[i], field, value)
 
     def update_image(self, game_slug: str, image_url: str):
         game = self._get(slug=game_slug)

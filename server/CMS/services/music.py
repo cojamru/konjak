@@ -1,4 +1,4 @@
-from fastapi import Depends
+from fastapi import Depends, HTTPException
 from sqlalchemy.orm import Session
 
 from ..tables import Album as AlbumORM
@@ -7,7 +7,9 @@ from ..tables import Track as TrackORM
 from ..tables import Link as LinkORM
 
 from ..database import get_session
-from ..models import AlbumCreate, TrackCreate
+from ..models import AlbumCreate, AlbumUpdate, TrackCreate
+
+from .utility import UtilityService
 
 
 class MusicService:
@@ -22,6 +24,21 @@ class MusicService:
         )
 
         return albums
+
+    def get_album(self, slug: str) -> AlbumORM :
+        album = (
+            self.session
+            .query(AlbumORM)
+            .filter_by(slug=slug)
+            .first()
+        )
+        if not album:
+            raise HTTPException(
+                status_code=404,
+                detail=f"Album not found"
+            )
+
+        return album
 
     def _get_or_create(self, model, defaults=None, **kwargs):
         instance = self.session.query(model).filter_by(**kwargs).one_or_none()
@@ -40,7 +57,7 @@ class MusicService:
             else:
                 return instance
 
-    def _init_and_get_tracks_featured(self, tracks: list[TrackCreate]) -> list[ArtistORM] | None:
+    def _set_tracks_featured(self, tracks: list[TrackCreate]) -> list[ArtistORM] | None:
         """
         Initialize tracks.featured and get list of unique featured artists
 
@@ -67,12 +84,19 @@ class MusicService:
         album_featured = list(set(album_featured))
         return album_featured
 
+    @staticmethod
+    def _set_tracks_artists(tracks: list[TrackCreate], artists: list[ArtistORM]):
+        for track in tracks:
+            track.artists = artists
+
     def create_album(self, album_data: AlbumCreate) -> AlbumORM:
         album_data.artists = [self._get_or_create(ArtistORM, **artist.dict()) for artist in album_data.artists]
         album_data.links = [LinkORM(**link.dict()) for link in album_data.links]
 
-        album_featured = self._init_and_get_tracks_featured(album_data.tracks)
-        album_data.tracks = [TrackORM(artists=album_data.artists, **track.dict()) for track in album_data.tracks]
+        self._set_tracks_artists(album_data.tracks, album_data.artists)
+        album_featured = self._set_tracks_featured(album_data.tracks)
+
+        album_data.tracks = [TrackORM(**track.dict()) for track in album_data.tracks]
         if album_featured:
             album_data.featured = album_featured
 
@@ -80,4 +104,31 @@ class MusicService:
         self.session.add(album)
         self.session.commit()
 
+        return album
+
+    def delete_album(self, slug: str):
+        album = self.get_album(slug=slug)
+        self.session.delete(album)
+
+        self.session.commit()
+
+    def update_album(self, slug: str, album_data: AlbumUpdate):
+        album = self.get_album(slug=slug)
+
+        album_data.artists = [self._get_or_create(ArtistORM, **artist.dict()) for artist in album_data.artists]
+        self._set_tracks_artists(album_data.tracks, album_data.artists)
+        album_featured = self._set_tracks_featured(album_data.tracks)
+
+        UtilityService.update_many_to_many(TrackORM, album.tracks, album_data.tracks)
+        UtilityService.update_many_to_many(LinkORM, album.links, album_data.links)
+
+        if album_featured:
+            album_data.featured = album_featured
+
+        for field, value in album_data:
+            if field in ['links', 'tracks']:
+                continue
+            setattr(album, field, value)
+
+        self.session.commit()
         return album

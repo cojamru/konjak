@@ -1,6 +1,6 @@
 from datetime import date
 
-from pydantic import BaseModel
+from pydantic import BaseModel, Extra
 
 from .links import LinkCreate, Link
 
@@ -16,7 +16,6 @@ class ArtistCreate(ArtistBase):
 class Artist(ArtistBase):
     id: int
     link: str | None
-    # tracks: list[Track]
 
     class Config:
         orm_mode = True
@@ -30,12 +29,16 @@ class TrackBase(BaseModel):
 class TrackCreate(TrackBase):
     featured: list[ArtistCreate] | None
 
+    class Config:
+        extra = Extra.allow
+
 
 class Track(TrackBase):
     id: int
 
     album_id: int
     artists: list[Artist]
+    featured: list[Artist]
 
     class Config:
         orm_mode = True
@@ -53,6 +56,18 @@ class AlbumCreate(AlbumBase):
     tracks: list[TrackCreate]
     artists: list[ArtistCreate]
     links: list[LinkCreate]
+
+    class Config:
+        extra = Extra.allow
+
+
+class AlbumUpdate(AlbumBase):
+    tracks: list[TrackCreate] | None
+    artists: list[ArtistCreate] | None
+    links: list[LinkCreate] | None
+
+    class Config:
+        extra = Extra.allow
 
 
 class Album(AlbumBase):

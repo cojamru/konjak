@@ -24,6 +24,11 @@ class HasArtists(object):
         )
         return relationship(Artist, secondary=artist_association)
 
+
+class HasFeatured(object):
+    """HasFeatured mixin, creates new featured_association for each parent.
+    """
+
     @declared_attr
     def featured(cls):
         featured_association = Table(
@@ -44,17 +49,17 @@ class Artist(Base):
     link = Column(String, nullable=True)
 
 
-class Track(Base, HasArtists):
+class Track(Base, HasArtists, HasFeatured):
     title = Column(String)
     description = Column(String, nullable=True)
 
     album_id = Column(Integer, ForeignKey("album.id"))
 
 
-class Album(Base, HasLinks, HasArtists):
+class Album(Base, HasLinks, HasArtists, HasFeatured):
     title = Column(String)
     slug = Column(String, unique=True)
     description = Column(String, nullable=True)
     release_date = Column(Date)
 
-    tracks = relationship("Track", backref='album')
+    tracks = relationship("Track", backref='album', cascade="all, delete-orphan", single_parent=True)

@@ -34,7 +34,6 @@ class OAuth2PasswordBearerWithCookie(OAuth2PasswordBearer):
                     headers={"WWW-Authenticate": "Bearer"},
                 )
 
-        print(f"param = {param}")
         return param
 
 
