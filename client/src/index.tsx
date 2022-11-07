@@ -5,7 +5,7 @@ import './index.scss';
 
 import { createRoot } from 'react-dom/client';
 
-import { CMSLayout } from './layouts/CMSLayout/CMSLayout';
+import { CMSLayout } from 'src/layouts';
 
 const rootElement = document.getElementById('app-root');
 
