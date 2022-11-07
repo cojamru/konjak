@@ -1,41 +1,44 @@
 from datetime import date
 
-from pydantic import BaseModel
+from pydantic import BaseModel, Extra, HttpUrl
 
 from .links import LinkCreate, Link
+
+
+class ArtistBase(BaseModel):
+    nickname: str
+
+
+class ArtistCreate(ArtistBase):
+    pass
+
+
+class Artist(ArtistBase):
+    id: int
+    link: str | None
+
+    class Config:
+        orm_mode = True
 
 
 class TrackBase(BaseModel):
     title: str
     description: str | None
 
-    artist_id: int
-    album_id: int
-
 
 class TrackCreate(TrackBase):
-    pass
+    featured: list[ArtistCreate] | None
+
+    class Config:
+        extra = Extra.allow
 
 
 class Track(TrackBase):
     id: int
 
-    class Config:
-        orm_mode = True
-
-
-class ArtistBase(BaseModel):
-    nickname: str
-    link: str
-
-
-class ArtistCreate(ArtistBase):
-    tracks: list[TrackCreate]
-
-
-class Artist(ArtistBase):
-    id: int
-    tracks: list[Track]
+    album_id: int
+    artists: list[Artist]
+    featured: list[Artist]
 
     class Config:
         orm_mode = True
@@ -46,19 +49,37 @@ class AlbumBase(BaseModel):
     description: str | None
     release_date: date
 
-    artist_id: int
-    featured: list[ArtistBase] | None
-
 
 class AlbumCreate(AlbumBase):
     slug: str
 
-    tracks: list[TrackCreate] | None
+    tracks: list[TrackCreate]
+    artists: list[ArtistCreate]
     links: list[LinkCreate]
+
+    class Config:
+        extra = Extra.allow
+
+
+class AlbumUpdate(AlbumBase):
+    tracks: list[TrackCreate] | None
+    artists: list[ArtistCreate] | None
+    links: list[LinkCreate] | None
+
+    class Config:
+        extra = Extra.allow
 
 
 class Album(AlbumBase):
     id: int
+    slug: str
+
+    tracks: list[Track]
+    artists: list[Artist]
+    featured: list[Artist] | None
+
+    links: list[Link]
+    image_url: HttpUrl | None
 
     class Config:
         orm_mode = True

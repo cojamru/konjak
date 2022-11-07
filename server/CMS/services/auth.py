@@ -11,10 +11,9 @@ from passlib.hash import bcrypt
 from pydantic import ValidationError
 from sqlalchemy.orm import Session
 
-from .. import tables
-
+from ..tables import User as UserORM
 from ..constants import AUTH_COOKIE_NAME
-from ..models.auth import User, Token, UserCreate
+from ..models import User, Token, UserCreate
 from ..database import get_session
 from ..settings import settings
 
@@ -35,7 +34,6 @@ class OAuth2PasswordBearerWithCookie(OAuth2PasswordBearer):
                     headers={"WWW-Authenticate": "Bearer"},
                 )
 
-        print(f"param = {param}")
         return param
 
 
@@ -84,7 +82,7 @@ class AuthService:
         return user
 
     @classmethod
-    def create_token(cls, user: tables.User) -> Token:
+    def create_token(cls, user: UserORM) -> Token:
         user_data = User.from_orm(user)
 
         now = datetime.utcnow()
@@ -108,7 +106,7 @@ class AuthService:
         self.session = session
 
     def register_user(self, user_data: UserCreate) -> Token:
-        user = tables.User(
+        user = UserORM(
             email=user_data.email.lower(),
             username=user_data.username.lower(),
             password_hash=self.hash_password(user_data.password),
@@ -138,7 +136,7 @@ class AuthService:
 
         user = (
             self.session
-            .query(tables.User)
+            .query(UserORM)
             .filter_by(username=username.lower())
             .first()
         )

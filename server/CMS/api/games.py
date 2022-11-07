@@ -2,10 +2,8 @@ from fastapi import APIRouter
 from fastapi import Depends
 from fastapi.responses import HTMLResponse
 
-from ..models.auth import User
-from ..models.games import Game, GameCreate, GameUpdate
-from ..services.auth import get_current_user
-from ..services.games import GamesService
+from ..models import User, Game, GameCreate, GameUpdate
+from ..services import get_current_user, GamesService
 
 games_router = APIRouter(
     prefix='/games',
