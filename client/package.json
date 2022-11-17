@@ -10,7 +10,8 @@
     "lint": "eslint src",
     "typecheck": "tsc --noEmit",
     "prettier": "prettier --write .",
-    "create-env": "ncp .env.example .env"
+    "create-env": "ncp .env.example .env",
+    "get-scheme": "npx openapi-typescript $(grep OPEN_API_SCHEME_URL .env | cut -d '=' -f2) --output ./src/api/scheme/scheme.ts"
   },
   "dependencies": {
     "@fontsource/ubuntu": "4.5.11",
