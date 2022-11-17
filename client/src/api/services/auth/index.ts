@@ -6,6 +6,6 @@ const Controller = 'auth';
 
 export const AuthenticationAPI = {
   signup: async (params: SignUpQueryParamsType): Promise<SignUpQueryResponseType> => {
-    return kyInstance.post(`${Controller}/sign-up`, { searchParams: params }).json();
+    return kyInstance.post(`${Controller}/sign-up`, { json: params }).json();
   },
 };
