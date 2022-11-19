@@ -1,24 +1,21 @@
 import { Layout } from 'antd';
+import { Outlet } from 'react-router-dom';
 
 import style from './CMSLayout.module.scss';
 import { CMSLayoutHeader, CMSLayoutFooter, CMSLayoutSider } from './components';
 
 const { Content } = Layout;
 
-type PropsType = {
-  children: React.ReactNode;
-};
-
-export const CMSLayout: React.FC<PropsType> = props => {
-  const { children } = props;
-
+export const CMSLayout: React.FC = () => {
   return (
     <Layout className={style.CMSLayout}>
       <CMSLayoutSider />
       <Layout>
         <CMSLayoutHeader />
 
-        <Content>{children}</Content>
+        <Content>
+          <Outlet />
+        </Content>
 
         <CMSLayoutFooter />
       </Layout>
