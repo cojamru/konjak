@@ -1,4 +1,8 @@
+import { useEffect } from 'react';
+
 import { Layout } from 'antd';
+
+import api from 'src/api';
 
 import style from './CMSLayout.module.scss';
 import { CMSLayoutHeader, CMSLayoutFooter, CMSLayoutSider } from './components';
