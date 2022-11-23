@@ -20,6 +20,8 @@
 
 `npm run create-env` - copy `.env.example` file contents to `.env` file
 
+`npm run get-scheme` - get open-api scheme
+
 ### VSCode eslint issue
 
 Add these lines to your `.vscode/settings.json` file (at the root of the repositor):
