@@ -11,7 +11,7 @@
     "typecheck": "tsc --noEmit",
     "prettier": "prettier --write .",
     "create-env": "ncp .env.example .env",
-    "get-scheme": "npx oazapfts $(grep OPEN_API_SCHEME_URL .env | cut -d '=' -f2) ./src/api/api.ts"
+    "get-scheme": "env $(cat .env | xargs) sh -c 'oazapfts $OPEN_API_SCHEME_URL ./src/api/__generated__/api.ts'"
   },
   "dependencies": {
     "@fontsource/ubuntu": "4.5.11",
@@ -19,7 +19,7 @@
     "ky": "0.32.2",
     "lodash": "4.17.21",
     "luxon": "3.1.0",
-    "oazapfts": "^4.3.1-formatted-path-params.1",
+    "oazapfts": "4.3.1-formatted-path-params.1",
     "react": "18.2.0",
     "react-dom": "18.2.0",
     "react-router-dom": "6.4.3"
@@ -34,6 +34,7 @@
     "@typescript-eslint/eslint-plugin": "5.42.0",
     "@typescript-eslint/parser": "5.42.0",
     "@vitejs/plugin-react": "2.2.0",
+    "cross-env": "^7.0.3",
     "eslint": "8.26.0",
     "eslint-config-airbnb": "19.0.4",
     "eslint-config-prettier": "8.5.0",
