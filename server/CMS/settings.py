@@ -6,6 +6,8 @@ class Settings(BaseSettings):
     server_port: int = 8000
     database_url: str = f"postgresql+psycopg2://..."
 
+    debug: bool = False
+
     jwt_secret: str = 'secret'
     jwt_algorithm: str = 'HS256'
     jwt_expiration: int = 3600
