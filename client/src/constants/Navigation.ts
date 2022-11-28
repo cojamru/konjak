@@ -1,6 +1,6 @@
 export enum Navigation {
   main = '/',
-  auth = 'auth',
+  auth = '/auth',
   games = '/games',
   music = '/music',
 }

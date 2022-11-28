@@ -1,5 +1,5 @@
 import { Layout, Menu } from 'antd';
-import { ItemType } from 'antd/lib/menu/hooks/useItems';
+import { ItemType } from 'antd/es/menu/hooks/useItems';
 import { useLocation, useNavigate } from 'react-router-dom';
 
 import { Navigation } from 'src/constants';

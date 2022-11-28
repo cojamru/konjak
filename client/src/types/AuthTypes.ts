@@ -1,5 +1,3 @@
-export type AuthDataType = {
-  access_token: string;
-  token_type: string;
-  expires: string;
-} | null;
+import { User } from 'src/api/__generated__';
+
+export type AuthDataType = User | null;

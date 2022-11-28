@@ -4,24 +4,25 @@ import { AuthDataType } from 'src/types';
 
 import { AuthContextType } from './ProvidersTypes';
 
-export const AuthContext = createContext<AuthContextType | null>(null);
+export const AuthContext = createContext<AuthContextType>({} as AuthContextType);
 
 export const AuthProvider = ({ children }) => {
   const [AuthData, setAuthData] = useState<AuthDataType>(null);
+  const [IsPending, setIsPending] = useState(true);
 
-  const signIn = (AuthData: AuthDataType, cb: () => void) => {
+  const signIn = (AuthData: AuthDataType) => {
     setAuthData(AuthData);
-    cb();
+    setIsPending(false);
   };
 
-  const signOut = (cb: () => void) => {
+  const signOut = () => {
     setAuthData(null);
-    cb();
+    setIsPending(false);
   };
 
   const Value = useMemo(() => {
-    return { AuthData, signIn, signOut };
-  }, [AuthData]);
+    return { AuthData, signIn, signOut, IsPending };
+  }, [AuthData, IsPending]);
 
   return <AuthContext.Provider value={Value}>{children}</AuthContext.Provider>;
 };
