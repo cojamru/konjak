@@ -1,19 +1,19 @@
 import { Button, Form, Input, message } from 'antd';
-import { handle } from 'oazapfts';
 import { useLocation, useNavigate } from 'react-router-dom';
 
-import api from 'src/api';
 import { Navigation } from 'src/constants';
 import { useAuth } from 'src/hooks';
 
 import { logoImage } from '../../assets';
 
 import style from './AuthPage.module.scss';
+import { getUser, signInUser } from './Services';
 
 export const AuthPage: React.FC = () => {
   const [messageApi, contextHolder] = message.useMessage();
 
-  const Navigate = useNavigate();
+  const navigate = useNavigate();
+
   const Location = useLocation();
 
   const { signIn } = useAuth();
@@ -21,31 +21,22 @@ export const AuthPage: React.FC = () => {
   const FromPage = Location.state?.from?.pathname || Navigation.main;
 
   const onFinish = (values: any) => {
-    handle(
-      api.signInAuthSignInPost({
-        username: values.username,
-        password: values.password,
-      }),
-      {
-        200() {
-          handle(api.getUserAuthUserGet(), {
-            200(response) {
-              signIn(response);
-              Navigate(FromPage);
-            },
-          });
-        },
-        401(response) {
-          messageApi.open({
-            type: 'error',
-            content: response.detail,
-          });
-        },
-        422() {
-          //
-        },
-      },
-    );
+    signInUser({
+      username: values.username,
+      password: values.password,
+    }).then(response => {
+      if (response.status === 200) {
+        getUser().then(response => {
+          signIn(response.data);
+          navigate(FromPage);
+        });
+      } else {
+        messageApi.open({
+          type: 'error',
+          content: response.data.detail?.toString(),
+        });
+      }
+    });
   };
 
   return (
