@@ -2,7 +2,7 @@ import { Layout, Menu } from 'antd';
 import { ItemType } from 'antd/es/menu/hooks/useItems';
 import { useLocation, useNavigate } from 'react-router-dom';
 
-import { Navigation } from 'src/constants';
+import { navigation } from 'src/constants';
 
 import style from './CMSLayoutSider.module.scss';
 
@@ -13,30 +13,30 @@ type PropsType = {
 };
 
 export const CMSLayoutSider: React.FC<PropsType> = () => {
-  const Location = useLocation();
-  const Navigate = useNavigate();
+  const location = useLocation();
+  const navigate = useNavigate();
 
   const menuData: ItemType[] = [
     {
-      key: Navigation.main,
+      key: navigation.MAIN,
       label: 'Главная',
-      onClick: () => Navigate(Navigation.main),
+      onClick: () => navigate(navigation.MAIN),
     },
     {
-      key: Navigation.games,
+      key: navigation.GAMES,
       label: 'Игры',
-      onClick: () => Navigate(Navigation.games),
+      onClick: () => navigate(navigation.GAMES),
     },
     {
-      key: Navigation.music,
+      key: navigation.MAIN,
       label: 'Музыка',
-      onClick: () => Navigate(Navigation.music),
+      onClick: () => navigate(navigation.MUSIC),
     },
   ];
 
   return (
     <Sider className={style.CMSLayoutSider}>
-      <Menu items={menuData} selectedKeys={[Location.pathname]} theme="dark" />
+      <Menu items={menuData} selectedKeys={[location.pathname]} theme="dark" />
     </Sider>
   );
 };

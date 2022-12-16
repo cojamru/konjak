@@ -11,8 +11,6 @@ import './index.scss';
 
 const rootElement = document.getElementById('app-root');
 
-// eslint-disable-next-line react-hooks/rules-of-hooks
-
 if (rootElement) {
   const reactRoot = createRoot(rootElement);
 

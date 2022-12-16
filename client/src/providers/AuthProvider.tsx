@@ -1,4 +1,4 @@
-import { createContext, useMemo, useState } from 'react';
+import { createContext, useCallback, useMemo, useState } from 'react';
 
 import { AuthDataType } from 'src/types';
 
@@ -10,19 +10,19 @@ export const AuthProvider = ({ children }) => {
   const [AuthData, setAuthData] = useState<AuthDataType>(null);
   const [IsPending, setIsPending] = useState(true);
 
-  const signIn = (AuthData: AuthDataType) => {
+  const signIn = useCallback((AuthData: AuthDataType) => {
     setAuthData(AuthData);
     setIsPending(false);
-  };
+  }, []);
 
-  const signOut = () => {
+  const signOut = useCallback(() => {
     setAuthData(null);
     setIsPending(false);
-  };
+  }, []);
 
-  const Value = useMemo(() => {
+  const providerValue = useMemo(() => {
     return { AuthData, signIn, signOut, IsPending };
-  }, [AuthData, IsPending]);
+  }, [AuthData, IsPending, signIn, signOut]);
 
-  return <AuthContext.Provider value={Value}>{children}</AuthContext.Provider>;
+  return <AuthContext.Provider value={providerValue}>{children}</AuthContext.Provider>;
 };

@@ -1,6 +1,6 @@
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
 
-import { Navigation } from './constants';
+import { navigation } from './constants';
 import { RequireAuth } from './hoc';
 import { CMSLayout } from './layouts';
 import { GamesPage, MainPage, MusicPage } from './pages';
@@ -12,7 +12,7 @@ export const AppRouter = () => {
     <BrowserRouter>
       <Routes>
         <Route
-          path={Navigation.main}
+          path={navigation.MAIN}
           element={
             <RequireAuth>
               <CMSLayout />
@@ -20,12 +20,12 @@ export const AppRouter = () => {
           }
         >
           <Route index element={<MainPage />} />
-          <Route path={Navigation.music} element={<MusicPage />} />
-          <Route path={Navigation.games} element={<GamesPage />} />
+          <Route path={navigation.MUSIC} element={<MusicPage />} />
+          <Route path={navigation.GAMES} element={<GamesPage />} />
           <Route path="*" element={<NotFoundPage />} />
         </Route>
 
-        <Route path={Navigation.auth} element={<AuthPage />} />
+        <Route path={navigation.AUTH} element={<AuthPage />} />
       </Routes>
     </BrowserRouter>
   );

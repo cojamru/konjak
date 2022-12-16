@@ -1,7 +1,9 @@
+import { useCallback } from 'react';
+
 import { Button, Form, Input, message } from 'antd';
 import { useLocation, useNavigate } from 'react-router-dom';
 
-import { Navigation } from 'src/constants';
+import { navigation } from 'src/constants';
 import { useAuth } from 'src/hooks';
 
 import { logoImage } from '../../assets';
@@ -14,30 +16,32 @@ export const AuthPage: React.FC = () => {
 
   const navigate = useNavigate();
 
-  const Location = useLocation();
-
   const { signIn } = useAuth();
 
-  const FromPage = Location.state?.from?.pathname || Navigation.main;
+  const location = useLocation();
+  const fromPage = location.state?.from?.pathname || navigation.MAIN;
 
-  const onFinish = (values: any) => {
-    signInUser({
-      username: values.username,
-      password: values.password,
-    }).then(response => {
-      if (response.status === 200) {
-        getUser().then(response => {
-          signIn(response.data);
-          navigate(FromPage);
-        });
-      } else {
-        messageApi.open({
-          type: 'error',
-          content: response.data.detail?.toString(),
-        });
-      }
-    });
-  };
+  const onFinish = useCallback(
+    (values: any) => {
+      signInUser({
+        username: values.username,
+        password: values.password,
+      }).then(response => {
+        if (response.status === 200) {
+          getUser().then(response => {
+            signIn(response.data);
+            navigate(fromPage);
+          });
+        } else {
+          messageApi.open({
+            type: 'error',
+            content: response.data.detail?.toString(),
+          });
+        }
+      });
+    },
+    [fromPage, messageApi, navigate, signIn],
+  );
 
   return (
     <div className={style.authPage}>

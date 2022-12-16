@@ -2,7 +2,7 @@ import { ReactElement } from 'react';
 
 import { useLocation, Navigate } from 'react-router-dom';
 
-import { Navigation } from 'src/constants';
+import { navigation } from 'src/constants';
 import { useAuth } from 'src/hooks';
 
 type PropsType = {
@@ -17,7 +17,7 @@ export const RequireAuth: React.FC<PropsType> = props => {
   const { AuthData, IsPending } = useAuth();
 
   if (!AuthData && !IsPending) {
-    return <Navigate to={Navigation.auth} state={{ from: Location }} />;
+    return <Navigate to={navigation.AUTH} state={{ from: Location }} />;
   }
 
   return children;

@@ -1,10 +1,10 @@
 import { ConfigProvider, theme } from 'antd';
 
 import { AppRouter } from './AppRouter';
-import { useGetUser } from './hooks/useGetUser';
+import { useUser } from './hooks/useUser';
 
 export const App: React.FC = () => {
-  useGetUser();
+  useUser();
 
   return (
     <ConfigProvider
