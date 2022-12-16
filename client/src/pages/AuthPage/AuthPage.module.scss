@@ -1,0 +1,54 @@
+@import '../../styles/imports.scss'; // цвета
+
+.authPage{
+  height: 100%;
+
+  display: flex;
+
+  flex-direction: column;
+  justify-content: center;
+
+  background-image: linear-gradient(to top left, $color-prime, $color-prime2);
+
+  &__substrate{
+    background-color: white;
+
+    width: 350px;
+
+    margin: auto;
+    padding: 40px;
+
+    border-radius: 10px;
+
+    &__logo{
+      display: block;
+
+      margin: auto;
+      margin-bottom: 40px;
+
+      border-radius: 100%;
+      width: 150px;
+    }
+
+    &__form{
+      input, button{
+        font-size: 18px !important;
+      }
+
+      & > div{
+        margin-bottom: 10px;
+      }
+
+      button{
+        height: fit-content;
+        width: 100%;
+
+        margin-top: 20px;
+      }
+    }
+
+    &__errorText{
+      color: red;
+    }
+  }
+}

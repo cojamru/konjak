@@ -9,5 +9,5 @@ type PropsType = {
 const { Header } = Layout;
 
 export const CMSLayoutHeader: React.FC<PropsType> = () => {
-  return <Header className={style.CMSLayoutHeader}>Header</Header>;
+  return <Header className={style.CMSLayoutHeader}>хедер</Header>;
 };
