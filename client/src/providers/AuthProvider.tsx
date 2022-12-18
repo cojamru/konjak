@@ -7,11 +7,11 @@ import { AuthContextType } from './ProvidersTypes';
 export const AuthContext = createContext<AuthContextType>({} as AuthContextType);
 
 export const AuthProvider = ({ children }) => {
-  const [AuthData, setAuthData] = useState<AuthDataType>(null);
-  const [IsPending, setIsPending] = useState(true);
+  const [authData, setAuthData] = useState<AuthDataType>(null);
+  const [isPending, setIsPending] = useState(true);
 
-  const signIn = useCallback((AuthData: AuthDataType) => {
-    setAuthData(AuthData);
+  const signIn = useCallback((authData: AuthDataType) => {
+    setAuthData(authData);
     setIsPending(false);
   }, []);
 
@@ -21,8 +21,8 @@ export const AuthProvider = ({ children }) => {
   }, []);
 
   const providerValue = useMemo(() => {
-    return { AuthData, signIn, signOut, IsPending };
-  }, [AuthData, IsPending, signIn, signOut]);
+    return { authData, isPending, signIn, signOut };
+  }, [authData, isPending, signIn, signOut]);
 
   return <AuthContext.Provider value={providerValue}>{children}</AuthContext.Provider>;
 };

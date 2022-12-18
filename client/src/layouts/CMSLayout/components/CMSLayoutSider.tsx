@@ -28,7 +28,7 @@ export const CMSLayoutSider: React.FC<PropsType> = () => {
       onClick: () => navigate(navigation.GAMES),
     },
     {
-      key: navigation.MAIN,
+      key: navigation.MUSIC,
       label: 'Музыка',
       onClick: () => navigate(navigation.MUSIC),
     },
