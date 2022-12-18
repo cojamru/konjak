@@ -6,7 +6,7 @@ import { useAuth } from './useAuth';
 
 export const useUser = (): api.User | null => {
   const { signIn } = useAuth();
-  const [User, setUser] = useState<api.User | null>(null);
+  const [user, setUser] = useState<api.User | null>(null);
 
   useEffect(() => {
     api.getUserAuthUserGet().then(response => {
@@ -22,5 +22,5 @@ export const useUser = (): api.User | null => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  return User;
+  return user;
 };

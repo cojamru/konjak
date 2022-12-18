@@ -14,9 +14,9 @@ export const RequireAuth: React.FC<PropsType> = props => {
 
   const Location = useLocation();
 
-  const { AuthData, IsPending } = useAuth();
+  const { authData, isPending } = useAuth();
 
-  if (!AuthData && !IsPending) {
+  if (!authData && !isPending) {
     return <Navigate to={navigation.AUTH} state={{ from: Location }} />;
   }
 
