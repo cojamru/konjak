@@ -12,10 +12,11 @@ type PropsType = {
 export const RequireAuth: React.FC<PropsType> = props => {
   const { children } = props;
 
+  const Location = useLocation();
+
   const { authData, isPending } = useAuth();
 
   if (!authData && !isPending) {
-    const Location = useLocation();
     return <Navigate to={navigation.AUTH} state={{ from: Location }} />;
   }
 
