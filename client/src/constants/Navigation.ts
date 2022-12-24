@@ -1,4 +1,5 @@
 export const MAIN = '/';
 export const AUTH = '/auth';
-export const GAMES = '/games'1;
+// eslint-disable-next-line prefer-template
+export const GAMES: string[] = ['/games', null];
 export const MUSIC = '/music';
