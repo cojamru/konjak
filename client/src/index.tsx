@@ -1,11 +1,13 @@
 import React from 'react';
 
-import 'antd/dist/antd.css';
-import './index.scss';
+import 'antd/dist/reset.css';
 
 import { createRoot } from 'react-dom/client';
 
-import { CMSLayout } from 'src/layouts';
+import { App } from './App';
+import { AuthProvider } from './providers/AuthProvider';
+
+import './index.scss';
 
 const rootElement = document.getElementById('app-root');
 
@@ -14,9 +16,9 @@ if (rootElement) {
 
   reactRoot.render(
     <React.StrictMode>
-      <CMSLayout>
-        <div>content</div>
-      </CMSLayout>
+      <AuthProvider>
+        <App />
+      </AuthProvider>
     </React.StrictMode>,
   );
 }

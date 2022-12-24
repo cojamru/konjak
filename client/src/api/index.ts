@@ -4,8 +4,9 @@ import * as api from './__generated__';
 
 api.defaults.baseUrl = ENDPOINT_URL;
 
+api.defaults.credentials = 'include';
 api.defaults.headers = {
-  access_token: 'secret',
+  'X-Requested-With': 'XMLHttpRequest',
 };
 
 export default api;
