@@ -3,25 +3,28 @@ import { useMutation, useQueryClient } from 'react-query';
 
 import api from 'src/api';
 
-export const useCreateGame = () => {
+export const useDeleteGame = () => {
   const queryClient = useQueryClient();
 
   const { isLoading, mutate, data, isSuccess } = useMutation(
-    'createGame',
-    (params: api.GameCreate) => {
-      return api.addGameGamesPost(params);
+    'deleteGame',
+    (params: Parameters<typeof api.deleteGameGamesDelete>[0]) => {
+      return api.deleteGameGamesDelete(params);
     },
     {
-      onSuccess: data => {
+      onSuccess: (data, variables) => {
         queryClient.setQueryData(['games'], (oldData: ApiResponse | undefined) => {
           let newData: ApiResponse = {
             data: oldData?.data || [],
             status: oldData?.status || 0,
           };
 
-          if (data.status === 200) {
-            newData = { ...newData, data: [...newData.data, data.data] };
-          }
+          newData = {
+            ...newData,
+            data: newData.data.filter(game => {
+              return game.slug !== variables;
+            }),
+          };
 
           return newData;
         });

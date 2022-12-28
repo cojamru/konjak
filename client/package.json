@@ -16,6 +16,7 @@
   "dependencies": {
     "@fontsource/ubuntu": "4.5.11",
     "antd": "5.0.0",
+    "dayjs": "^1.11.7",
     "formik": "^2.2.9",
     "ky": "0.32.2",
     "lodash": "4.17.21",

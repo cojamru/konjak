@@ -5,6 +5,7 @@ import { RequireAuth } from './hoc';
 import { CMSLayout } from './layouts';
 import { GamesPage, MainPage, MusicPage } from './pages';
 import { AuthPage } from './pages/AuthPage';
+import { EditGamePage } from './pages/EditGamePage';
 import { NotFoundPage } from './pages/NotFoundPage';
 
 export const AppRouter = () => {
@@ -22,6 +23,9 @@ export const AppRouter = () => {
           <Route index element={<MainPage />} />
           <Route path={navigation.MUSIC} element={<MusicPage />} />
           <Route path={navigation.GAMES} element={<GamesPage />} />
+          <Route path={navigation.GAMES} element={<GamesPage />} />
+          <Route path={navigation.GAMES_ADD} element={<EditGamePage />} />
+
           <Route path="*" element={<NotFoundPage />} />
         </Route>
 
