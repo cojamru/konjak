@@ -1,7 +1,10 @@
-import { DeleteOutlined, AppstoreAddOutlined } from '@ant-design/icons';
+/* eslint-disable no-prototype-builtins */
+import { useState } from 'react';
+
+import { DeleteOutlined, PlusOutlined } from '@ant-design/icons';
 import { Button, DatePicker, Form, Input } from 'antd';
 import dayjs from 'dayjs';
-import { FormikProps, withFormik } from 'formik';
+import { ErrorMessage, FieldArray, FormikProps, withFormik } from 'formik';
 import * as Yup from 'yup';
 
 import { EditGameFormValuesType } from '../EditGamePageTypes';
@@ -16,33 +19,39 @@ const InnerForm = (props: FormikProps<EditGameFormValuesType>) => {
   const { touched, errors, values } = props;
   const { handleChange, handleSubmit, setFieldValue } = props;
 
+  const [maxLinkKey, setMaxLinkKey] = useState(0);
+
   const { TextArea } = Input;
 
   const addLink = () => {
     setFieldValue('links', [...values.links, { title: '', url: '' }]);
+    setMaxLinkKey(+maxLinkKey);
   };
 
   const removeLink = key => {
-    setFieldValue('links', values.links.splice(key, 1));
+    const currentValue = [...values.links];
+    currentValue.splice(key, 1);
+
+    setFieldValue('links', currentValue);
   };
 
   return (
     <Form className={style.editGameForm} labelCol={{ span: 4 }}>
-      <Form.Item label="Название">
-        <Input onChange={handleChange} value={values.title} type="title" name="title" placeholder="Название" />
-        {touched.title && errors.title && <div>{errors.title}</div>}
+      <Form.Item required label="Название">
+        <Input onChange={handleChange} value={values.title} name="title" placeholder="Название" />
+        <ErrorMessage name="title" />
       </Form.Item>
 
-      <Form.Item label="Дата релиза">
+      <Form.Item required label="Дата релиза">
         <DatePicker
           allowClear={false}
-          onChange={(date, dateString) => setFieldValue('releaseDate', dateString)}
+          onChange={(date, dateString) => setFieldValue('release_date', dateString)}
           value={dayjs(values.release_date)}
-          name="releaseDate"
+          name="release_date"
         />
       </Form.Item>
 
-      <Form.Item label="Платформа">
+      <Form.Item required label="Платформа">
         <Input
           onChange={handleChange}
           value={values.platform}
@@ -50,15 +59,15 @@ const InnerForm = (props: FormikProps<EditGameFormValuesType>) => {
           name="platform"
           placeholder="Платформа"
         />
-        {touched.platform && errors.platform && <div>{errors.platform}</div>}
+        <ErrorMessage name="platform" />
       </Form.Item>
 
-      <Form.Item label="slug">
+      <Form.Item required label="slug">
         <Input onChange={handleChange} value={values.slug} type="slug" name="slug" placeholder="slug" />
-        {touched.slug && errors.slug && <div>{errors.slug}</div>}
+        <ErrorMessage name="slug" />
       </Form.Item>
 
-      <Form.Item label="Описание">
+      <Form.Item required label="Описание">
         <TextArea
           rows={6}
           onChange={handleChange}
@@ -66,35 +75,62 @@ const InnerForm = (props: FormikProps<EditGameFormValuesType>) => {
           name="description"
           placeholder="Описание"
         />
-        {touched.description && errors.description && <div>{errors.description}</div>}
+        <ErrorMessage name="description" />
       </Form.Item>
 
       <Form.Item className={style.editGameForm__links} label="Ссылки">
-        {values.links.map((link, key) => (
-          <div className={style.editGameForm__links__link} key={key}>
-            <Input
-              onChange={event => {
-                event.preventDefault();
-                setFieldValue(`links.${key}.title`, event.target.value);
-              }}
-              value={values.links[key].title}
-              placeholder="Название"
-            />
-            <Input
-              onChange={event => {
-                event.preventDefault();
-                setFieldValue(`links.${key}.url`, event.target.value);
-              }}
-              value={values.links[key].url}
-              placeholder="URL"
-            />
-            <Button onClick={removeLink} danger size="small">
-              <DeleteOutlined />
-            </Button>
-          </div>
-        ))}
+        <FieldArray
+          name="links"
+          render={() => (
+            <div>
+              {values.links.map((link, key) => {
+                const linksErrorStatus = errors.links?.[key];
+                const linksTouchedStatus = touched.links?.[key];
+
+                const isTitleHasError = linksErrorStatus?.hasOwnProperty('title') && linksTouchedStatus?.title;
+                const isUrlHasError = linksErrorStatus?.hasOwnProperty('url') && linksTouchedStatus?.url;
+
+                return (
+                  <div className={style.editGameForm__links__link} key={key}>
+                    <div>
+                      <Input
+                        status={isTitleHasError ? 'error' : ''}
+                        onChange={event => {
+                          setFieldValue(`links.${key}.title`, event.target.value);
+                        }}
+                        name={`links[${key}].title`}
+                        value={values.links[key].title}
+                        placeholder="Название"
+                      />
+                      <ErrorMessage name={`links[${key}].title`} />
+                    </div>
+
+                    <div>
+                      <Input
+                        onChange={event => {
+                          setFieldValue(`links.${key}.url`, event.target.value);
+                        }}
+                        status={isUrlHasError ? 'error' : ''}
+                        name={`links[${key}].url`}
+                        value={values.links[key].url}
+                        placeholder="URL"
+                      />
+                      <ErrorMessage name={`links[${key}].url`} />
+                    </div>
+
+                    <Button htmlType="button" onClick={() => removeLink(key)} danger>
+                      <DeleteOutlined />
+                    </Button>
+                  </div>
+                );
+              })}
+              <Button onClick={addLink}>
+                <PlusOutlined />
+              </Button>
+            </div>
+          )}
+        />
       </Form.Item>
-      <Button onClick={addLink}>Добавить ссылку</Button>
 
       <div className={style.editGameForm__actions}>
         <Button onClick={() => handleSubmit()} htmlType="submit">
@@ -112,10 +148,16 @@ const InnerForm = (props: FormikProps<EditGameFormValuesType>) => {
 };
 
 const FormSchema = Yup.object().shape({
-  title: Yup.string().required('Please enter notification title'),
-  platform: Yup.string().required('Please enter notification platform'),
-  slug: Yup.string().required('Please enter notification slug'),
-  description: Yup.string().required('Please enter notification description'),
+  title: Yup.string().required('Please enter title'),
+  platform: Yup.string().required('Please enter platform'),
+  slug: Yup.string().required('Please enter slug'),
+  description: Yup.string().required('Please enter description'),
+  links: Yup.array().of(
+    Yup.object().shape({
+      title: Yup.string().required('Enter title'),
+      url: Yup.string().required('Enter url'),
+    }),
+  ),
 });
 
 export const EditGameForm = withFormik<PropsType, EditGameFormValuesType>({
@@ -129,7 +171,7 @@ export const EditGameForm = withFormik<PropsType, EditGameFormValuesType>({
       links: props.links || [{ title: '', url: '' }],
     };
   },
-
+  validateOnChange: true,
   validationSchema: FormSchema,
 
   handleSubmit: (values, { props }) => {
