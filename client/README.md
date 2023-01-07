@@ -20,7 +20,7 @@
 
 `npm run create-env` - copy `.env.example` file contents to `.env` file
 
-`npm run get-scheme` - get open-api scheme
+`npm run get-schema` - get Open API schema
 
 ### VSCode eslint issue
 
