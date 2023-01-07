@@ -1,20 +1,23 @@
 import { RollbackOutlined } from '@ant-design/icons';
 import { Breadcrumb, Button } from 'antd';
-import { Link, useLocation, useNavigate } from 'react-router-dom';
+import { Link, useLocation, useNavigate, useParams } from 'react-router-dom';
 
 import { navigation } from 'src/constants';
+import { GAMES } from 'src/constants/Navigation';
 
 import style from './Breadcrumbs.module.scss';
 
 export const Breadcrumbs = () => {
   const location = useLocation();
 
+  const { slug } = useParams();
+
   const navigate = useNavigate();
 
   const breadcrumbNameMap: Record<string, string> = {
     [navigation.GAMES]: 'Игры',
     [navigation.GAMES_ADD]: 'Создание',
-    [navigation.GAMES_EDIT]: 'Редактирование',
+    [`${GAMES}/${slug}`]: `${slug}`,
     [navigation.MUSIC]: 'Музыка',
   };
 

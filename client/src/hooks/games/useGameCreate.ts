@@ -3,10 +3,10 @@ import { useMutation, useQueryClient } from 'react-query';
 
 import api from 'src/api';
 
-export const useCreateGame = () => {
+export const useGameCreate = () => {
   const queryClient = useQueryClient();
 
-  const { isLoading, mutate, data, isSuccess } = useMutation(
+  const { mutate } = useMutation(
     'createGame',
     (params: api.GameCreate) => {
       return api.addGameGamesPost(params);
@@ -29,5 +29,5 @@ export const useCreateGame = () => {
     },
   );
 
-  return { isLoading, mutate, data, isSuccess };
+  return { mutate };
 };

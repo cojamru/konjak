@@ -3,10 +3,10 @@ import { useMutation, useQueryClient } from 'react-query';
 
 import api from 'src/api';
 
-export const useDeleteGame = () => {
+export const useGameDelete = () => {
   const queryClient = useQueryClient();
 
-  const { isLoading, mutate, data, isSuccess } = useMutation(
+  const { mutate } = useMutation(
     'deleteGame',
     (params: Parameters<typeof api.deleteGameGamesDelete>[0]) => {
       return api.deleteGameGamesDelete(params);
@@ -32,5 +32,5 @@ export const useDeleteGame = () => {
     },
   );
 
-  return { isLoading, mutate, data, isSuccess };
+  return { mutate };
 };

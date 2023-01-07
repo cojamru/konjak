@@ -3,7 +3,7 @@ import { useQuery } from 'react-query';
 import api from 'src/api';
 
 export const useGames = () => {
-  const { isLoading, data, error } = useQuery({
+  const { isLoading, data } = useQuery({
     refetchOnMount: false,
     queryKey: ['games'],
     queryFn: api.getGamesGamesGet,
@@ -12,5 +12,5 @@ export const useGames = () => {
     },
   });
 
-  return { isLoading, games: data, error };
+  return { isLoading, games: data };
 };
