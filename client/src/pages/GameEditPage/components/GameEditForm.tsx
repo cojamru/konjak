@@ -7,7 +7,8 @@ import * as Yup from 'yup';
 
 import { GameCreateFormValuesType, UpdateGameFormValuesType } from '../GameEditPageTypes';
 
-import { UpdateGameInnerForm, CreateGameInnerForm } from './InnerForm';
+import { CreateGameInnerForm } from './GameCreateInnerForm';
+import { UpdateGameInnerForm } from './GameUpdateInnerForm';
 
 type GameCreatePropsType = {
   handleSubmit: (values: GameCreateFormValuesType) => void;

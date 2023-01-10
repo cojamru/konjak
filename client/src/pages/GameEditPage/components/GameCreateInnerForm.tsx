@@ -6,10 +6,10 @@ import { Button, DatePicker, Form, Input } from 'antd';
 import dayjs from 'dayjs';
 import { ErrorMessage, FieldArray, FormikProps } from 'formik';
 
-import { UpdateGameFormValuesType } from '../../GameEditPageTypes';
 import style from '../GameEditForm.module.scss';
+import { GameCreateFormValuesType } from '../GameEditPageTypes';
 
-export const UpdateGameInnerForm = (props: FormikProps<UpdateGameFormValuesType>) => {
+export const CreateGameInnerForm = (props: FormikProps<GameCreateFormValuesType>) => {
   const { touched, errors, values, handleBlur } = props;
   const { handleChange, handleSubmit, setFieldValue } = props;
 
@@ -17,7 +17,7 @@ export const UpdateGameInnerForm = (props: FormikProps<UpdateGameFormValuesType>
 
   return (
     <Form className={style.editGameForm} labelCol={{ span: 4 }}>
-      <Form.Item required label="Название">
+      <Form.Item name="basic" required label="Название">
         <div>
           <Input
             onBlur={handleBlur}
@@ -32,16 +32,14 @@ export const UpdateGameInnerForm = (props: FormikProps<UpdateGameFormValuesType>
       </Form.Item>
 
       <Form.Item required label="Дата релиза">
-        <div>
-          <DatePicker
-            onBlur={handleBlur}
-            status={errors.release_date && touched.release_date ? 'error' : ''}
-            allowClear={false}
-            onChange={(__, dateString) => setFieldValue('release_date', dayjs(dateString).format('YYYY-MM-DD'))}
-            value={dayjs(values.release_date)}
-            name="release_date"
-          />
-        </div>
+        <DatePicker
+          onBlur={handleBlur}
+          status={errors.release_date && touched.release_date ? 'error' : ''}
+          allowClear={false}
+          onChange={(__, dateString) => setFieldValue('release_date', dayjs(dateString).format('YYYY-MM-DD'))}
+          value={dayjs(values.release_date)}
+          name="release_date"
+        />
       </Form.Item>
 
       <Form.Item required label="Платформа">
@@ -55,6 +53,20 @@ export const UpdateGameInnerForm = (props: FormikProps<UpdateGameFormValuesType>
             placeholder="Платформа"
           />
           <ErrorMessage name="platform" />
+        </div>
+      </Form.Item>
+
+      <Form.Item required label="slug">
+        <div>
+          <Input
+            onBlur={handleBlur}
+            onChange={handleChange}
+            status={errors.slug && touched.slug ? 'error' : ''}
+            value={values.slug}
+            name="slug"
+            placeholder="slug"
+          />
+          <ErrorMessage name="slug" />
         </div>
       </Form.Item>
 
@@ -95,7 +107,7 @@ export const UpdateGameInnerForm = (props: FormikProps<UpdateGameFormValuesType>
                         }}
                         onBlur={handleBlur}
                         name={`links[${key}].title`}
-                        value={[...(values.links || [])][key].title}
+                        value={values.links[key].title}
                         placeholder="Название"
                       />
                       <ErrorMessage name={`links[${key}].title`} />
@@ -109,7 +121,7 @@ export const UpdateGameInnerForm = (props: FormikProps<UpdateGameFormValuesType>
                         onBlur={handleBlur}
                         status={isUrlHasError ? 'error' : ''}
                         name={`links[${key}].url`}
-                        value={[...(values.links || [])][key].url}
+                        value={values.links[key].url}
                         placeholder="URL"
                       />
                       <ErrorMessage name={`links[${key}].url`} />
@@ -130,8 +142,8 @@ export const UpdateGameInnerForm = (props: FormikProps<UpdateGameFormValuesType>
       </Form.Item>
 
       <div className={style.editGameForm__actions}>
-        <Button htmlType="submit" type="primary" onClick={() => handleSubmit()}>
-          Обновить
+        <Button type="primary" onClick={() => handleSubmit()} htmlType="submit">
+          Создать
         </Button>
       </div>
     </Form>
