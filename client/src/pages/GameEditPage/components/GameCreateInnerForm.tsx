@@ -2,87 +2,39 @@
 /* eslint-disable no-prototype-builtins */
 
 import { DeleteOutlined, PlusOutlined } from '@ant-design/icons';
-import { Button, DatePicker, Form, Input } from 'antd';
-import dayjs from 'dayjs';
-import { ErrorMessage, FieldArray, FormikProps } from 'formik';
+import { Button, Form } from 'antd';
+import { FieldArray, FormikProps } from 'formik';
 
-import style from '../GameEditForm.module.scss';
+import { TextField, DatePickerField, TextAreaField } from 'src/components';
+
 import { GameCreateFormValuesType } from '../GameEditPageTypes';
 
-export const CreateGameInnerForm = (props: FormikProps<GameCreateFormValuesType>) => {
-  const { touched, errors, values, handleBlur } = props;
-  const { handleChange, handleSubmit, setFieldValue } = props;
+import style from './GameEditForm.module.scss';
 
-  const { TextArea } = Input;
+export const CreateGameInnerForm = (props: FormikProps<GameCreateFormValuesType>) => {
+  const { values } = props;
+  const { handleSubmit } = props;
 
   return (
     <Form className={style.editGameForm} labelCol={{ span: 4 }}>
-      <Form.Item name="basic" required label="Название">
-        <div>
-          <Input
-            onBlur={handleBlur}
-            status={errors.title && touched.title ? 'error' : ''}
-            onChange={handleChange}
-            value={values.title}
-            name="title"
-            placeholder="Название"
-          />
-          <ErrorMessage name="title" />
-        </div>
+      <Form.Item required label="Название">
+        <TextField type="text" name="title" placeholder="Название" />
       </Form.Item>
 
       <Form.Item required label="Дата релиза">
-        <DatePicker
-          onBlur={handleBlur}
-          status={errors.release_date && touched.release_date ? 'error' : ''}
-          allowClear={false}
-          onChange={(__, dateString) => setFieldValue('release_date', dayjs(dateString).format('YYYY-MM-DD'))}
-          value={dayjs(values.release_date)}
-          name="release_date"
-        />
+        <DatePickerField allowClear={false} name="release_date" />
       </Form.Item>
 
       <Form.Item required label="Платформа">
-        <div>
-          <Input
-            onBlur={handleBlur}
-            status={errors.platform && touched.platform ? 'error' : ''}
-            onChange={handleChange}
-            value={values.platform}
-            name="platform"
-            placeholder="Платформа"
-          />
-          <ErrorMessage name="platform" />
-        </div>
+        <TextField type="text" name="platform" placeholder="Платформа" />
       </Form.Item>
 
       <Form.Item required label="slug">
-        <div>
-          <Input
-            onBlur={handleBlur}
-            onChange={handleChange}
-            status={errors.slug && touched.slug ? 'error' : ''}
-            value={values.slug}
-            name="slug"
-            placeholder="slug"
-          />
-          <ErrorMessage name="slug" />
-        </div>
+        <TextField type="text" name="slug" placeholder="slug" />
       </Form.Item>
 
       <Form.Item required label="Описание">
-        <div>
-          <TextArea
-            rows={6}
-            onBlur={handleBlur}
-            status={errors.description && touched.description ? 'error' : ''}
-            onChange={handleChange}
-            value={values.description}
-            name="description"
-            placeholder="Описание"
-          />
-          <ErrorMessage name="description" />
-        </div>
+        <TextAreaField rows={6} type="textArea" name="description" placeholder="Описание" />
       </Form.Item>
 
       <Form.Item className={style.editGameForm__links} label="Ссылки">
@@ -91,40 +43,13 @@ export const CreateGameInnerForm = (props: FormikProps<GameCreateFormValuesType>
           render={arrayHelpers => (
             <div>
               {values.links?.map((link, key) => {
-                const linksErrorStatus = errors.links?.[key];
-                const linksTouchedStatus = touched.links?.[key];
-
-                const isTitleHasError = linksErrorStatus?.hasOwnProperty('title') && linksTouchedStatus?.title;
-                const isUrlHasError = linksErrorStatus?.hasOwnProperty('url') && linksTouchedStatus?.url;
-
                 return (
                   <div className={style.editGameForm__links__link} key={key}>
                     <div>
-                      <Input
-                        status={isTitleHasError ? 'error' : ''}
-                        onChange={event => {
-                          setFieldValue(`links.${key}.title`, event.target.value);
-                        }}
-                        onBlur={handleBlur}
-                        name={`links[${key}].title`}
-                        value={values.links[key].title}
-                        placeholder="Название"
-                      />
-                      <ErrorMessage name={`links[${key}].title`} />
+                      <TextField type="text" name={`links[${key}].title`} placeholder="Название" />
                     </div>
-
                     <div>
-                      <Input
-                        onChange={event => {
-                          setFieldValue(`links.${key}.url`, event.target.value);
-                        }}
-                        onBlur={handleBlur}
-                        status={isUrlHasError ? 'error' : ''}
-                        name={`links[${key}].url`}
-                        value={values.links[key].url}
-                        placeholder="URL"
-                      />
-                      <ErrorMessage name={`links[${key}].url`} />
+                      <TextField type="text" name={`links[${key}].url`} placeholder="URL" />
                     </div>
 
                     <Button htmlType="button" onClick={() => arrayHelpers.remove(key)} danger>
