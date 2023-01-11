@@ -32,5 +32,5 @@ export const useGameDelete = () => {
     },
   );
 
-  return { mutate };
+  return { deleteGame: mutate };
 };

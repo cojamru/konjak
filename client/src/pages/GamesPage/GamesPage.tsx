@@ -11,7 +11,7 @@ import { GameType } from './GamesPageTypes';
 
 export const GamesPage: React.FC = () => {
   const { isLoading, games } = useGames();
-  const { mutate: deleteGame } = useGameDelete();
+  const { deleteGame } = useGameDelete();
 
   const navigate = useNavigate();
 

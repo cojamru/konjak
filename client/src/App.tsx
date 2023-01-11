@@ -2,6 +2,7 @@ import { ConfigProvider, theme } from 'antd';
 import { QueryClient, QueryClientProvider } from 'react-query';
 
 import { AppRouter } from './AppRouter';
+import { colors } from './constants';
 import { useUser } from './hooks/useUser';
 
 const queryClient = new QueryClient({
@@ -21,7 +22,7 @@ export const App: React.FC = () => {
         theme={{
           algorithm: theme.darkAlgorithm,
           token: {
-            colorPrimary: '#4e60ac',
+            colorPrimary: colors.PRIMARY,
           },
         }}
       >

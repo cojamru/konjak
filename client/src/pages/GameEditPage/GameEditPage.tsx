@@ -1,9 +1,8 @@
-import { useEffect, useState } from 'react';
+import { useMemo } from 'react';
 
 import { message, Spin } from 'antd';
 import { useNavigate, useParams } from 'react-router-dom';
 
-import { Game } from 'src/api/__generated__';
 import { GAMES } from 'src/constants/Navigation';
 import { useGameCreate, useGames, useGameUpdate } from 'src/hooks';
 
@@ -16,22 +15,19 @@ export const GameEditPage: React.FC = () => {
 
   const [messageApi, contextHolder] = message.useMessage();
 
-  const [editableGame, setEditableGame] = useState<Game>();
-
-  const { mutate: createGame } = useGameCreate();
-  const { mutate: updateGame } = useGameUpdate();
+  const { createGame } = useGameCreate();
+  const { updateGame } = useGameUpdate();
 
   const { games } = useGames();
   const { slug } = useParams();
 
-  useEffect(() => {
+  const editableGame = useMemo(() => {
     if (slug) {
-      setEditableGame(
-        games?.find(game => {
-          return game.slug === slug;
-        }),
-      );
+      return games?.find(game => {
+        return game.slug === slug;
+      });
     }
+    return null;
   }, [games, slug]);
 
   const сreate = (params: GameCreateFormValuesType) => {

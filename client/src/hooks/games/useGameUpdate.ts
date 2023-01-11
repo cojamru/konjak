@@ -37,5 +37,5 @@ export const useGameUpdate = () => {
     },
   );
 
-  return { mutate };
+  return { updateGame: mutate };
 };

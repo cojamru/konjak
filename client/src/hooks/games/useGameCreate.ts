@@ -29,5 +29,5 @@ export const useGameCreate = () => {
     },
   );
 
-  return { mutate };
+  return { createGame: mutate };
 };
