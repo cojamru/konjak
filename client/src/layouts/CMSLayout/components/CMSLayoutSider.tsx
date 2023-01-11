@@ -8,11 +8,7 @@ import style from './CMSLayoutSider.module.scss';
 
 const { Sider } = Layout;
 
-type PropsType = {
-  //
-};
-
-export const CMSLayoutSider: React.FC<PropsType> = () => {
+export const CMSLayoutSider: React.FC = () => {
   const location = useLocation();
   const navigate = useNavigate();
 
@@ -36,7 +32,7 @@ export const CMSLayoutSider: React.FC<PropsType> = () => {
 
   return (
     <Sider className={style.CMSLayoutSider}>
-      <Menu items={menuData} selectedKeys={[location.pathname]} theme="dark" />
+      <Menu items={menuData} selectedKeys={[`/${location.pathname.split('/')[1]}`]} theme="dark" />
     </Sider>
   );
 };
