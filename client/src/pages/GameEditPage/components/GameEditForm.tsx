@@ -3,12 +3,13 @@
 
 import dayjs from 'dayjs';
 import { withFormik } from 'formik';
-import * as Yup from 'yup';
 
 import { GameCreateFormValuesType, UpdateGameFormValuesType } from '../GameEditPageTypes';
 
+import { CreateFormValidationSchema } from './CreateFormValidationSchema';
 import { CreateGameInnerForm } from './GameCreateInnerForm';
 import { UpdateGameInnerForm } from './GameUpdateInnerForm';
+import { UpdateFormValidationSchema } from './UpdateFormValidationSchema';
 
 type GameCreatePropsType = {
   handleSubmit: (values: GameCreateFormValuesType) => void;
@@ -17,31 +18,6 @@ type GameCreatePropsType = {
 type GameUpdatePropsType = Partial<UpdateGameFormValuesType> & {
   handleSubmit: (values: UpdateGameFormValuesType) => void;
 };
-
-const CreateFormSchema = Yup.object().shape({
-  title: Yup.string().required('Please enter title'),
-  platform: Yup.string().required('Please enter platform'),
-  slug: Yup.string().required('Please enter slug'),
-  description: Yup.string().required('Please enter description'),
-  links: Yup.array().of(
-    Yup.object().shape({
-      title: Yup.string().required('Enter title'),
-      url: Yup.string().required('Enter url'),
-    }),
-  ),
-});
-
-const UpdateFormSchema = Yup.object().shape({
-  title: Yup.string().required('Please enter title'),
-  platform: Yup.string().required('Please enter platform'),
-  description: Yup.string().required('Please enter description'),
-  links: Yup.array().of(
-    Yup.object().shape({
-      title: Yup.string().required('Enter title'),
-      url: Yup.string().required('Enter url'),
-    }),
-  ),
-});
 
 const mapPropsToValues = props => {
   return {
@@ -71,7 +47,7 @@ export const GameCreateForm = withFormik<GameCreatePropsType, GameCreateFormValu
     };
   },
 
-  validationSchema: CreateFormSchema,
+  validationSchema: CreateFormValidationSchema,
 })(CreateGameInnerForm);
 
 export const GameEditForm = withFormik<GameUpdatePropsType, UpdateGameFormValuesType>({
@@ -81,5 +57,5 @@ export const GameEditForm = withFormik<GameUpdatePropsType, UpdateGameFormValues
   mapPropsToValues,
 
   validateOnChange: true,
-  validationSchema: UpdateFormSchema,
+  validationSchema: UpdateFormValidationSchema,
 })(UpdateGameInnerForm);
