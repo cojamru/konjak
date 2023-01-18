@@ -3,7 +3,7 @@ import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import { navigation } from './constants';
 import { RequireAuth } from './hoc';
 import { CMSLayout } from './layouts';
-import { GamesPage, MainPage, MusicPage } from './pages';
+import { GamesPage, MainPage, AlbumsPage } from './pages';
 import { AuthPage } from './pages/AuthPage';
 import { GameEditPage } from './pages/GameEditPage';
 import { NotFoundPage } from './pages/NotFoundPage';
@@ -21,7 +21,7 @@ export const AppRouter = () => {
           }
         >
           <Route index element={<MainPage />} />
-          <Route path={navigation.MUSIC} element={<MusicPage />} />
+          <Route path={navigation.MUSIC} element={<AlbumsPage />} />
           <Route path={navigation.GAMES} element={<GamesPage />} />
           <Route path={navigation.GAMES} element={<GamesPage />} />
           <Route path={navigation.GAMES_ADD} element={<GameEditPage />} />
