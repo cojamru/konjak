@@ -3,7 +3,7 @@ import { Breadcrumb, Button } from 'antd';
 import { Link, useLocation, useNavigate, useParams } from 'react-router-dom';
 
 import { navigation } from 'src/constants';
-import { GAMES } from 'src/constants/Navigation';
+import { GAMES, MUSIC } from 'src/constants/Navigation';
 
 import style from './Breadcrumbs.module.scss';
 
@@ -18,6 +18,8 @@ export const Breadcrumbs = () => {
     [navigation.GAMES]: 'Игры',
     [navigation.GAMES_ADD]: 'Создание',
     [`${GAMES}/${slug}`]: `${slug}`,
+    [navigation.MUSIC_ADD]: 'Создание',
+    [`${MUSIC}/${slug}`]: `${slug}`,
     [navigation.MUSIC]: 'Музыка',
   };
 

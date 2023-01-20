@@ -2,10 +2,18 @@
   padding: 10px;
 
   &__add{
-    width: calc(100%);
-    height: calc(100% - 10px);
+    display: flex;
+    flex-direction: column;
+
+    justify-content: center;
+    align-items: center;
+
+    padding: 15px 0;
 
     font-size: 30px;
+
+    width: calc(100%);
+    height: calc(100% - 10px);
   }
 
   &__card{

@@ -3,7 +3,7 @@ import { Button, Card, Col, Popconfirm, Row, Spin, Tag } from 'antd';
 import Meta from 'antd/es/card/Meta';
 import { useNavigate } from 'react-router-dom';
 
-import { GAMES, GAMES_ADD } from 'src/constants/Navigation';
+import { MUSIC, MUSIC_ADD } from 'src/constants/Navigation';
 import { useAlbums, useAlbumDelete } from 'src/hooks';
 
 import style from './AlbumsPage.module.scss';
@@ -17,9 +17,9 @@ export const AlbumsPage: React.FC = () => {
 
   const editAlbumPageNavigate = (slug?: AlbumType['slug']) => {
     if (slug) {
-      navigate(`${GAMES}/${slug}`);
+      navigate(`${MUSIC}/${slug}`);
     } else {
-      navigate(GAMES_ADD);
+      navigate(MUSIC_ADD);
     }
   };
 

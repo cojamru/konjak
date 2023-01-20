@@ -8,6 +8,7 @@ import { useAlbumCreate, useAlbums, useAlbumUpdate } from 'src/hooks';
 
 import style from './AlbumEditPage.module.scss';
 import { AlbumCreateFormValuesType, UpdateAlbumFormValuesType } from './AlbumEditPageTypes';
+import { AlbumCreateForm, AlbumEditForm } from './components';
 
 export const AlbumEditPage: React.FC = () => {
   const navigate = useNavigate();
@@ -64,7 +65,15 @@ export const AlbumEditPage: React.FC = () => {
   return (
     <div className={style.editAlbumPage}>
       {contextHolder}
-      {slug ? editableAlbum ? <div /> : <Spin /> : <div />}
+      {slug ? (
+        editableAlbum ? (
+          <AlbumEditForm handleSubmit={update} {...editableAlbum} />
+        ) : (
+          <Spin />
+        )
+      ) : (
+        <AlbumCreateForm handleSubmit={сreate} />
+      )}
     </div>
   );
 };
